@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Things To Do</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/ictask.css" />
+</head>
+<body ng-app="todo"  class="well auth-demo-application waiting-for-angular">
+<div id="initializing-panel"></div>
+<div id="content-outer">
+<div id="login-holder">
+        <div id="loginbox">
+          <div id="login-inner" ng:controller="LoginController">
+            <form ng-submit="submit()">
+              <table border="0" cellpadding="0" cellspacing="0">
+                <tr ng-show="failMsg.length" >
+                  <th>&nbsp;</th>
+                  <td>{{failMsg}}</td>
+                </tr>
+                <tr>
+                  <th>Username</th>
+                  <td><input type="text" class="login-inp" ng-model="username"/></td>
+                </tr>
+                <tr>
+                  <th>Password</th>
+                  <td><input type="password" class="login-inp" ng-model="password"/></td>
+                </tr>
+                <tr>
+                  <th></th>
+                  <td>
+                  <button name="submit" type="submit" class="btn btn-success">Login</button>
+                </tr>
+              </table>
+            </form>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+<div class="well" id="content" ng-controller="App">
+<div style="width:100%;" >
+	<div style="float:right;" class="well">
+	  <div id="logout" >
+	     <span>Hello {{curUser.username}}</span> <a href="" ng-click="logout()" >logout</a>
+	  </div>
+	  <div >
+	    Remaining <strong>{{remaining()}}</strong> of <strong>{{tasks.length}}</strong>.
+	    [ <a ng-click="archive()">archive</a> completed tasks]
+	  </div>
+	  <div style="float: right;"><span class="muted initialism " >&nbsp;<p>&nbsp;<p>click column headers to sort</span></div>
+	  
+	</div>
+	<div style="float:left;" class="well">
+	  <ng-form>
+	    ADD TASK<p>&nbsp;&nbsp;desc:<textarea required minlength="5" type="text" ng-model="newDesc"></textarea> 
+	    <button ng-disabled="!newDesc" ng-click="add()" class="btn btn-success">quick add</button>
+	  </ng-form>
+	</div>
+	<div >Search/Filter Tasks: <form><input ng-model="descquery"></form></div>
+	
+</div>
+<table  >
+<tr>
+<th ng:class="getClass('votescore()')"><a href="" ng-click="predicate = 'votescore()'; reverse=!reverse">&nbsp;&nbsp;priority</a></th>
+<th ng:class="getClass('dueDate')"><a href="" ng-click="predicate = 'dueDate'; reverse=!reverse">&nbsp;&nbsp;due<p>&nbsp;&nbsp;date</a></th>
+<th ng:class="getClass('scheduledDate')"><a href="" ng-click="predicate = 'scheduledDate'; reverse=!reverse">&nbsp;&nbsp;scheduled<p>&nbsp;&nbsp;date</a></th>
+<th ng:class="getClass('done')"><a href="" ng-click="predicate = 'done'; reverse=!reverse">&nbsp;&nbsp;done</a></th>
+<th ng:class="getClass('notes')"><a href="" ng-click="predicate = 'notes'; reverse=!reverse">&nbsp;&nbsp;notes</a></th>
+<th ng:class="getClass('desc')"><a href="" ng-click="predicate = 'desc'; reverse=!reverse">&nbsp;&nbsp;description</a></th>
+<th ng:class="getClass('sizeInHours')"><a href="" ng-click="predicate = 'sizeInHours'; reverse=!reverse">&nbsp;&nbsp;Estimated Person Hours</a></th>
+<th ng:class="getClass('committee')"><a href="" ng-click="predicate = 'committee'; reverse=!reverse">&nbsp;&nbsp;committee</a></th>
+<th>position by person</th>
+<th></th>
+</tr>
+<tr ng-repeat="task in tasks | filter:descquery | orderBy:predicate:reverse" class="done-{{task.done}}">
+  <td>
+    <a ng-click="toggleImage(task,'up')" ng-class="getVoteClass(task,'up')"><img id="upbutton" src="images/up.png"  height="32" width="32" /></a>
+  	<a ng-click="toggleImage(task,'down')" ng-class="getVoteClass(task,'down')"><img id="dwnbutton" src="images/down.png" height="32" width="32" /></a>
+  	{{task.votescore()}}
+  	
+  </td>
+  <td>{{ task.dueDate | date: 'EEE yyyy-MM-dd' }}</td>
+  <td>{{ task.scheduledDate | date: 'EEE yyyy-MM-dd' }}</td>
+  <td>
+    <input type="checkbox" ng-model="task.done" ng-click="doMarkDone(task)" >
+    <button class="btn btn-mini btn-primary" ng-click="$parent.addProgressNote(task)" data-toggle="modal" href="#addProgressModal">
+    	<i class="icon-pencil icon-white"></i>&nbsp;add progress note
+    </button>
+  </td>
+  <td>
+	<div>
+ 		<table>
+  			<tr ng-repeat="note in task.notes" >
+  				<td>{{note}}</td>
+  			</tr>
+  		</table>
+	</div> 
+  </td>
+  
+  <td > {{task.desc}}</td>
+  <td > {{task.sizeInHours}}</td>
+  <td > {{task.committee}}</td>
+  <td>
+	<div>
+ 		<table>
+  			<tr ng-repeat="job in task.jobs" >
+  				<td>{{job.job}}</td><td><input auto-complete ui-tasks="users" ng-model="job.name" ng-model-onblur ng-change="task.$update()"></td><td><button class="btn btn-mini btn-danger" ng-click="rmJob(task,job)" >remove position</button></td>
+  			</tr>
+  		</table>
+  		<ng-form><input class="addJobStyle" type="text" ng-model="newJob" value="new job"><button class="btn btn-mini btn-success" ng-click="addJob(task,newJob)" >add position</button></ng-form>
+	</div> 
+  </td>
+  <td>
+  	<button class="btn btn-mini btn-primary" ng-click="$parent.editTask(task)" data-toggle="modal" href="#editTaskModal">
+    	<i class="icon-pencil icon-white"></i>&nbsp;Edit
+    </button>
+  </td>
+</tr>
+</table>
+<div class="modal hide fade" ng-include="'editTaskModal.html'" id="editTaskModal"></div>
+<div class="modal hide fade" ng-include="'addProgressModal.html'" id="addProgressModal"></div>
+</div>
+</div>
+
+  <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="lib/jquery/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="lib/angular.js"></script>
+  <script type="text/javascript" src="lib/angular-ui-custom/angular-ui.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular-cookies.min.js"></script>
+  <script type="text/javascript" src="lib/angular-resource.js"></script>
+  <script type="text/javascript" src="lib/angular-http-auth.js" ></script>
+  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="todo.js"></script>
+
+</body>
+</html>

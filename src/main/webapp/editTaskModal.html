@@ -1,0 +1,65 @@
+<div ng-controller="TaskEditModalController">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 ng-show="newTask">Create New Task</h3>
+    <h3 ng-hide="newTask">Edit Task: {{ desc }}</h3>
+  </div>
+  <form class="form-horizontal">
+    <div class="modal-body">
+      
+      <div class="control-group">
+        <label class="control-label">Description:</label>
+        <div class="controls">
+          <textarea type="text" ng-model="desc" placeholder="pound a nail" ></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Size (Person Hours):</label>
+        <div class="controls">
+          <input type="text" ng-model="sizeInHours" placeholder="3" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Which Committee:</label>
+        <div class="controls">
+          <select ng-model="committee" ng-options="comm.ID as comm.Title for comm in committees">
+          <option value="">-- chose a committee --</option>
+          </select>          
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">due Date:</label>
+        <div class="controls">
+          <span >{{dueDate| date: 'EEE' }}</span>
+          <input name="dueDate" ng-model="dueDate" ui-date="{ dateFormat: 'yy-mm-dd' }"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">scheduled Date:</label>
+        <div class="controls">
+          <span >{{scheduledDate| date: 'EEE' }}</span>
+          <input name="scheduledDate" ng-model="scheduledDate" ui-date="{ dateFormat: 'yy-mm-dd' }"/>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">added Date:</label>
+        <div class="controls">
+          <span >{{addedDate| date: 'EEE yyyy-MM-dd' }}</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">added By:</label>
+        <div class="controls">
+          <span >{{addedBy}}</span>
+        </div>
+      </div>      
+    <div class="modal-footer">
+      <button type="button" class="btn pull-left" ng-click="precancel()" data-dismiss="modal">
+        <i class="icon-remove"></i>&nbsp;&nbsp;Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" ng-disabled="incomplete" ng-click="presubmit()" data-dismiss="modal">
+        <i class="icon-ok icon-white"></i>&nbsp;&nbsp;Save Changes
+      </button>
+    </div>
+  </form>
+</div>

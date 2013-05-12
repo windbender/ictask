@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Use this definition if using a Java EE 6 container This also stops Eclipse 
+	from complaining that 3.0 is not a valid version <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" 
+	http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"> -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+<!-- 	<listener> -->
+<!-- 		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class> -->
+<!-- 	</listener> -->
+
+<!-- 	<filter> -->
+<!-- 		<filter-name>ShiroFilter</filter-name> -->
+<!-- 		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class> -->
+<!-- 	</filter> -->
+
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>ShiroFilter</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 		<dispatcher>REQUEST</dispatcher> -->
+<!-- 		<dispatcher>FORWARD</dispatcher> -->
+<!-- 		<dispatcher>INCLUDE</dispatcher> -->
+<!-- 		<dispatcher>ERROR</dispatcher> -->
+<!-- 	</filter-mapping> -->
+	
+	<filter>
+		<filter-name>authfilter</filter-name>
+		<filter-class>org.monansrill.AuthFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>authfilter</filter-name>
+		<url-pattern>/jictask/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<servlet-name>proxy</servlet-name>
+		<servlet-class>org.monansrill.QueryAddingProxy</servlet-class>
+		<init-param>
+			<param-name>targetUri</param-name>
+			<param-value>https://api.mongolab.com/api/1/databases/taskerdb/collections</param-value>
+		</init-param>
+		<init-param>
+			<param-name>log</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
+	<servlet>
+		<servlet-name>authorizor</servlet-name>
+		<servlet-class>org.monansrill.AuthServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>usergetter</servlet-name>
+		<servlet-class>org.monansrill.UserServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>proxy</servlet-name>
+		<url-pattern>/jictask/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>authorizor</servlet-name>
+		<url-pattern>/auth/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>usergetter</servlet-name>
+		<url-pattern>/users/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>
