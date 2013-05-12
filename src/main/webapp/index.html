@@ -62,32 +62,30 @@
 </div>
 <table  >
 <tr>
+<th><!-- edit --></th>
 <th ng:class="getClass('votescore()')"><a href="" ng-click="predicate = 'votescore()'; reverse=!reverse">&nbsp;&nbsp;priority</a></th>
+<th ng:class="getClass('desc')"><a href="" ng-click="predicate = 'desc'; reverse=!reverse">&nbsp;&nbsp;description</a></th>
+<th ng:class="getClass('notes')"><a href="" ng-click="predicate = 'notes'; reverse=!reverse">&nbsp;&nbsp;notes</a></th>
+<th ng:class="getClass('done')"><a href="" ng-click="predicate = 'done'; reverse=!reverse">&nbsp;&nbsp;done</a></th>
+<th ng:class="getClass('sizeInHours')"><a href="" ng-click="predicate = 'sizeInHours'; reverse=!reverse">&nbsp;&nbsp;Estimated Person Hours</a></th>
+<th>position by person</th>
 <th ng:class="getClass('dueDate')"><a href="" ng-click="predicate = 'dueDate'; reverse=!reverse">&nbsp;&nbsp;due<p>&nbsp;&nbsp;date</a></th>
 <th ng:class="getClass('scheduledDate')"><a href="" ng-click="predicate = 'scheduledDate'; reverse=!reverse">&nbsp;&nbsp;scheduled<p>&nbsp;&nbsp;date</a></th>
-<th ng:class="getClass('done')"><a href="" ng-click="predicate = 'done'; reverse=!reverse">&nbsp;&nbsp;done</a></th>
-<th ng:class="getClass('notes')"><a href="" ng-click="predicate = 'notes'; reverse=!reverse">&nbsp;&nbsp;notes</a></th>
-<th ng:class="getClass('desc')"><a href="" ng-click="predicate = 'desc'; reverse=!reverse">&nbsp;&nbsp;description</a></th>
-<th ng:class="getClass('sizeInHours')"><a href="" ng-click="predicate = 'sizeInHours'; reverse=!reverse">&nbsp;&nbsp;Estimated Person Hours</a></th>
 <th ng:class="getClass('committee')"><a href="" ng-click="predicate = 'committee'; reverse=!reverse">&nbsp;&nbsp;committee</a></th>
-<th>position by person</th>
-<th></th>
 </tr>
 <tr ng-repeat="task in tasks | filter:descquery | orderBy:predicate:reverse" class="done-{{task.done}}">
+  <td>
+  	<button class="btn btn-mini btn-primary" ng-click="$parent.editTask(task)" data-toggle="modal" href="#editTaskModal">
+    	<i class="icon-pencil icon-white"></i>&nbsp;Edit
+    </button>
+  </td>
   <td>
     <a ng-click="toggleImage(task,'up')" ng-class="getVoteClass(task,'up')"><img id="upbutton" src="images/up.png"  height="32" width="32" /></a>
   	<a ng-click="toggleImage(task,'down')" ng-class="getVoteClass(task,'down')"><img id="dwnbutton" src="images/down.png" height="32" width="32" /></a>
   	{{task.votescore()}}
   	
   </td>
-  <td>{{ task.dueDate | date: 'EEE yyyy-MM-dd' }}</td>
-  <td>{{ task.scheduledDate | date: 'EEE yyyy-MM-dd' }}</td>
-  <td>
-    <input type="checkbox" ng-model="task.done" ng-click="doMarkDone(task)" >
-    <button class="btn btn-mini btn-primary" ng-click="$parent.addProgressNote(task)" data-toggle="modal" href="#addProgressModal">
-    	<i class="icon-pencil icon-white"></i>&nbsp;add progress note
-    </button>
-  </td>
+  <td > {{task.desc}}</td>
   <td>
 	<div>
  		<table>
@@ -97,10 +95,15 @@
   		</table>
 	</div> 
   </td>
+
+  <td>
+    <input type="checkbox" ng-model="task.done" ng-click="doMarkDone(task)" >
+    <button class="btn btn-mini btn-primary" ng-click="$parent.addProgressNote(task)" data-toggle="modal" href="#addProgressModal">
+    	<i class="icon-pencil icon-white"></i>&nbsp;add note
+    </button>
+  </td>
   
-  <td > {{task.desc}}</td>
   <td > {{task.sizeInHours}}</td>
-  <td > {{task.committee}}</td>
   <td>
 	<div>
  		<table>
@@ -111,11 +114,9 @@
   		<ng-form><input class="addJobStyle" type="text" ng-model="newJob" value="new job"><button class="btn btn-mini btn-success" ng-click="addJob(task,newJob)" >add position</button></ng-form>
 	</div> 
   </td>
-  <td>
-  	<button class="btn btn-mini btn-primary" ng-click="$parent.editTask(task)" data-toggle="modal" href="#editTaskModal">
-    	<i class="icon-pencil icon-white"></i>&nbsp;Edit
-    </button>
-  </td>
+  <td>{{ task.dueDate | date: 'EEE yyyy-MM-dd' }}</td>
+  <td>{{ task.scheduledDate | date: 'EEE yyyy-MM-dd' }}</td>
+  <td > {{task.committee}}</td>
 </tr>
 </table>
 <div class="modal hide fade" ng-include="'editTaskModal.html'" id="editTaskModal"></div>
