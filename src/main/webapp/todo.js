@@ -429,6 +429,8 @@ function TaskEditModalController($scope, $rootScope, $http, CurUser, CurEditTask
 		editTask.committee = $scope.committee;
 		editTask.sizeInHours = $scope.sizeInHours;
 		editTask.$update();
+		
+		
 	});
 	
 	$rootScope.$on('task:cancel', function() {
@@ -461,7 +463,11 @@ function AddProgressModalController($scope, $rootScope, $http, CurUser, CurEditT
 		if(!editTask.hasOwnProperty('notes')) {
 			editTask.notes = [];
 		}
-		editTask.notes.push($scope.progressNote);
+		var aNote = {
+			"who" : CurUser.username,
+			"note" : $scope.progressNote
+		};
+		editTask.notes.push(aNote);
 		editTask.$update();
 	});
 	
