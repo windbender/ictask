@@ -94,13 +94,11 @@
   			</tr>
   		</table>
 	</div> 
+    <button class="btn btn-mini btn-primary btn-success" ng-click="$parent.addProgressNote(task)" data-toggle="modal" href="#addProgressModal">add note</button>
   </td>
 
   <td>
-    <input type="checkbox" ng-model="task.done" ng-click="doMarkDone(task)" >
-    <button class="btn btn-mini btn-primary" ng-click="$parent.addProgressNote(task)" data-toggle="modal" href="#addProgressModal">
-    	<i class="icon-pencil icon-white"></i>&nbsp;add note
-    </button>
+    done:<input type="checkbox" ng-model="task.done" ng-click="doMarkDone(task)" >
   </td>
   
   <td > {{task.sizeInHours}}</td>
