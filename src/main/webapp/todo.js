@@ -365,11 +365,10 @@ app.controller({
 });
 
 function TaskEditModalController($scope, $rootScope, $http, CurUser, CurEditTask, Task) {
-	$scope.task = Task;
 	$scope.curUser = CurUser;
 	$scope.newTask = false;
 	// zero out the fields
-
+	
 	$scope.committees = [
 	                     {"ID":"Maintenance","Title":"Maintenance"},
 	                     {"ID":"Land Plans","Title":"Land Plans"},
@@ -380,11 +379,6 @@ function TaskEditModalController($scope, $rootScope, $http, CurUser, CurEditTask
 	                     {"ID":"none","Title":"none"},
 	                     
 	           ];
-
-	
-	// some error stuff 
-	//$scope.pwError = false;
-	//$scope.incomplete = false;
 
 	// if we're starting the edit what do we do ?
 	$rootScope.$on('task:edit', function() {
@@ -423,7 +417,6 @@ function TaskEditModalController($scope, $rootScope, $http, CurUser, CurEditTask
 			$scope.sizeInHours = 3;
 			$scope.doneDate = '';
 		}
-		alert(" scope is now"+JSON.stringify($scope, undefined, 2));
 	});
 	
 	$rootScope.$on('task:submit', function() {
