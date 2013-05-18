@@ -30,15 +30,13 @@
       <div class="control-group">
         <label class="control-label">due Date:</label>
         <div class="controls">
-          <span >{{dueDate| date: 'EEE' }}</span>
-          <input name="dueDate" ng-model="dueDate" ui-date="{ dateFormat: 'yy-mm-dd' }"/>
+          <input name="dueDate" ng-model="dueDate" ui-date="{ dateFormat: 'D yy-mm-dd' }" ui-date-format/>
         </div>
       </div>
       <div class="control-group">
         <label class="control-label">scheduled Date:</label>
         <div class="controls">
-          <span >{{scheduledDate| date: 'EEE' }}</span>
-          <input name="scheduledDate" ng-model="scheduledDate" ui-date="{ dateFormat: 'yy-mm-dd' }"/>
+          <input name="scheduledDate" ng-model="scheduledDate" ui-date="{ dateFormat: 'D yy-mm-dd' }" ui-date-format/>
         </div>
       </div>
       <div class="control-group">
