@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="css/ictask.css" />
 </head>
 <body ng-app="todo"  class="well auth-demo-application waiting-for-angular">
-<div id="initializing-panel"></div>
+<div id="initializing-panel"> Please Wait...</div>
 <div id="content-outer">
 <div id="login-holder">
         <div id="loginbox">
@@ -51,7 +51,7 @@
 	  <div style="float: right;"><span class="muted initialism " >&nbsp;<p>&nbsp;<p>click column headers to sort</span></div>
 	  
 	</div>
-	<div style="float:left;" class="well">
+	<div  class="well">
 	  <ng-form>
 	    ADD TASK<p>&nbsp;&nbsp;desc:<textarea required minlength="5" type="text" ng-model="newDesc"></textarea> 
 	    <button ng-disabled="!newDesc" ng-click="add()" class="btn btn-success">quick add</button>
@@ -60,7 +60,7 @@
 	<div >Search/Filter Tasks: <form><input ng-model="descquery"></form></div>
 	
 </div>
-<table  >
+<table>
 <tr>
 <th><!-- edit --></th>
 <th ng:class="getClass('votescore()')"><a href="" ng-click="predicate = 'votescore()'; reverse=!reverse">&nbsp;&nbsp;priority</a></th>
