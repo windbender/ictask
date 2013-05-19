@@ -430,7 +430,18 @@ function TaskEditModalController($scope, $rootScope, $http, CurUser, CurEditTask
 		editTask.sizeInHours = $scope.sizeInHours;
 		editTask.$update();
 		
-		
+		$scope.newTask = false;
+		// copy the "old" data into the current scope for use
+		$scope.desc = "";
+		$scope.votes = "";
+		$scope.jobs = "";
+		$scope.dueDate = "";
+		$scope.scheduledDate = "";
+		$scope.addedDate = "";
+		$scope.addedBy = "";
+		$scope.committee = "";
+		$scope.sizeInHours = "";
+		$scope.doneDate = "";
 	});
 	
 	$rootScope.$on('task:cancel', function() {
@@ -442,8 +453,11 @@ function TaskEditModalController($scope, $rootScope, $http, CurUser, CurEditTask
 	};
 	$scope.precancel = function () {
 		$rootScope.$broadcast('task:cancel');
-	}
-;
+	};
+	
+	$scope.$watch('sizeInHours', function() {
+        $scope.sizeInHours = parseFloat($scope.sizeInHours);
+    });
 }
 
 function AddProgressModalController($scope, $rootScope, $http, CurUser, CurEditTask, Task) {
