@@ -1,8 +1,3 @@
-/* 
-	Blue Dream
-	Written by Teylor Feliz  http://www.admixweb.com
-*/
-
 /* feat: before angular is ready, display loading animation */
 body.waiting-for-angular div#content-outer {
   display: none;
