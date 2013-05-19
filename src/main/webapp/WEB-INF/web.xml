@@ -33,10 +33,19 @@
 		<filter-name>authfilter</filter-name>
 		<filter-class>org.monansrill.AuthFilter</filter-class>
 	</filter>
+	<filter>
+		<filter-name>validationfilter</filter-name>
+		<filter-class>org.monansrill.SchemaValidatorFilter</filter-class>
+	</filter>
 	<filter-mapping>
 		<filter-name>authfilter</filter-name>
 		<url-pattern>/jictask/*</url-pattern>
 	</filter-mapping>
+	<filter-mapping>
+		<filter-name>validationfilter</filter-name>
+		<url-pattern>/jictask/*</url-pattern>
+	</filter-mapping>
+	
 	<servlet>
 		<servlet-name>proxy</servlet-name>
 		<servlet-class>org.monansrill.QueryAddingProxy</servlet-class>

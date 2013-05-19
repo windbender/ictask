@@ -1,0 +1,101 @@
+{
+	"type":"object",
+	"$schema": "http://json-schema.org/draft-03/schema",
+	"id": "http://jsonschema.net",
+	"required":false,
+	"properties":{
+		"addedBy": {
+			"type":"string",
+			"id": "http://jsonschema.net/addedBy",
+			"required":true
+		},
+		"addedDate": {
+			"type":"string",
+			"id": "http://jsonschema.net/addedDate",
+			"required":true
+		},
+		"committee": {
+			"type":"string",
+			"id": "http://jsonschema.net/committee",
+			"required":false
+		},
+		"desc": {
+			"type":"string",
+			"id": "http://jsonschema.net/desc",
+			"required":true
+		},
+		"doneDate": {
+			"type":"string",
+			"id": "http://jsonschema.net/doneDate",
+			"required":false
+		},
+		"jobs": {
+			"type":"array",
+			"id": "http://jsonschema.net/jobs",
+			"required":false,
+			"items":
+				{
+					"type":"object",
+					"id": "http://jsonschema.net/jobs/0",
+					"required":false,
+					"properties":{
+						"job": {
+							"type":"string",
+							"id": "http://jsonschema.net/jobs/0/job",
+							"required":true
+						},
+						"name": {
+							"type":"string",
+							"id": "http://jsonschema.net/jobs/0/name",
+							"required":true
+						}
+					}
+				}
+			
+
+		},
+		"notes": {
+			"type":"array",
+			"id": "http://jsonschema.net/notes",
+			"required":false,
+			"items":
+				{
+					"type":"object",
+					"id": "http://jsonschema.net/jobs/0",
+					"required":false,
+					"properties":{
+						"who": {
+							"type":"string",
+							"id": "http://jsonschema.net/jobs/0/job",
+							"required":true
+						},
+						"note": {
+							"type":"string",
+							"id": "http://jsonschema.net/jobs/0/name",
+							"required":true
+						}
+					}
+				}
+			
+
+		},
+		"sizeInHours": {
+			"type":"number",
+			"id": "http://jsonschema.net/sizeInHours",
+			"required":false
+		},
+		"votes": {
+			"type":"array",
+			"id": "http://jsonschema.net/votes",
+			"required":false,
+			"items":
+				{
+					"type":"string",
+					"id": "http://jsonschema.net/votes/0",
+					"required":true
+				}
+			
+
+		}
+	}
+}
