@@ -37,11 +37,9 @@ public class SchemaValidatorFilter implements Filter {
 			final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
 			schema = factory.getJsonSchema(fstabSchema);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("problem while setting up JSON schema",e);
 		} catch (ProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("problem while setting up JSON schema",e);
 		}
 	}
 
@@ -60,23 +58,19 @@ public class SchemaValidatorFilter implements Filter {
 					MultiReadHttpServletRequest wrappedRequest = new MultiReadHttpServletRequest( (HttpServletRequest) request);
 					try {
 						ObjectMapper mapper = new ObjectMapper();
-	//					JsonFactory jf = mapper.getJsonFactory();
 						
 						InputStream is = wrappedRequest.getInputStream();
 						JsonNode jn = mapper.readTree(is);
 	
-						
-	//					JsonParser jp = jf.createJsonParser(is);
-	//					JsonNode jn = jp.readValueAsTree();
 						ProcessingReport report = schema.validate(jn);
 						if(report.isSuccess()) {
 							chain.doFilter(wrappedRequest, response);
 						} else {
-							logger.debug("ok failing this .. JSON did not parse");
+							logger.error("ok failing this .. JSON did not parse: "+report);
 							((HttpServletResponse) response).setStatus(415);
 						}
 					} catch (ProcessingException e) {
-						logger.debug("ok failing this .. JSON did not parse because ",e);
+						logger.error("ok failing this .. JSON did not parse because ",e);
 						((HttpServletResponse) response).setStatus(415);
 					}
 				}
