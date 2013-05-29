@@ -186,15 +186,6 @@ app.controller('App', function($cookies, $scope, $rootScope, $http, $window, Use
 	}
 	$scope.tasks = Task.query();
 
-//	var self = this;
-//	this.startPolling = function(){
-//		function poll(){
-//			$scope.tasks = Task.query();
-//	        $defer(poll, 30000);
-//	    };
-//	    poll();
-//	  };
-//	self.startPolling();
 	$scope.add = function() {
 		var task = new Task({
 			votes : [],
@@ -340,6 +331,48 @@ app.controller('App', function($cookies, $scope, $rootScope, $http, $window, Use
 		$rootScope.$broadcast('task:edit');
 	};
 	
+	
+
+	var socket = $.atmosphere;
+	var subSocket;
+
+	function subscribe() {
+		var request = { url : "http://localhost:8080/ictask/pubsub/ictaskjictaskitems", transport: "long-polling"};
+
+	    request.onMessage = function (response) {
+	        if (response.status == 200) {
+	            var data = response.responseBody;
+	            if (data.length > 0) {
+	            	var obj = jQuery.parseJSON( data );
+	            	
+	            	function isTargetObject(compid) {
+	            		return function(task) {
+	            			return (task._id.$oid === compid);
+	            		};
+	            	}
+	            	var matches = $scope.tasks.filter(isTargetObject(obj.id));
+	            		            	
+	            	// update!!!
+	            	$rootScope.$apply(function() {
+	            		matches[0].desc = obj.msg.desc;
+		    			matches[0].votes = obj.msg.votes;
+		    			matches[0].jobs = obj.msg.jobs;
+		    			matches[0].dueDate = obj.msg.dueDate;
+		    			matches[0].scheduledDate = obj.msg.scheduledDate;
+		    			matches[0].addedDate = obj.msg.addedDate;
+		    			matches[0].addedBy = obj.msg.addedBy;
+		    			matches[0].committee = obj.msg.committee;
+		    			matches[0].sizeInHours = obj.msg.sizeInHours;
+		    			matches[0].doneDate = obj.msg.doneDate;
+		            	});
+	            }
+	        }
+	    };
+
+	    subSocket = socket.subscribe(request);
+	}
+
+	subscribe();
 });
 
 app.controller({
@@ -509,3 +542,5 @@ function AddProgressModalController($scope, $rootScope, $http, CurUser, CurEditT
 	}
 ;
 }
+
+

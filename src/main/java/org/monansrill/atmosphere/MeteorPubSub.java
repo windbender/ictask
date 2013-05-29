@@ -56,7 +56,7 @@ public class MeteorPubSub extends HttpServlet implements Runnable {
 	public void run() {
     	do {
 	    	try {
-				Thread.sleep(3000);
+				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 			}
 	    	

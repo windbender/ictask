@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <script type="text/javascript" src="jquery/jquery-1.9.0.js"></script>
-    <script type="text/javascript" src="lib/jquery1.9/jquery.form.js"></script>
+<!--     <script type="text/javascript" src="lib/jquery1.9/jquery.form.js"></script> -->
     <script type="text/javascript" src="jquery/jquery.atmosphere.js"></script>
 
     <script type="text/javascript">
@@ -19,14 +19,6 @@
                 return document.getElementById(arguments[0]);
             }
 
-            function getTransport(t) {
-                transport = t.options[t.selectedIndex].value;
-                if (transport == 'autodetect') {
-                    transport = 'websocket';
-                }
-
-                return false;
-            }
 
             function getElementByIdValue() {
                 detectedTransport = null;
@@ -35,8 +27,7 @@
 
             function subscribe() {
             	var bare = "http://localhost:8080/ictask/"
-                var request = { url : bare + 'pubsub/' + getElementByIdValue('topic'),
-                    transport: getElementByIdValue('transport')};
+                var request = { url : bare + 'pubsub/simple',transport: 'long-polling'};
 
                 request.onMessage = function (response) {
                     detectedTransport = response.transport;
@@ -51,34 +42,12 @@
                 subSocket = socket.subscribe(request);
             }
 
-            function unsubscribe(){
+            getElementById('connect').onclick = function(event) {
                 socket.unsubscribe();
-            }
-
-            function connect() {
-                unsubscribe();
                 getElementById('phrase').value = '';
                 getElementById('sendMessage').className = '';
                 getElementById('phrase').focus();
                 subscribe();
-                getElementById('connect').value = "Switch transport";
-            }
-
-            getElementById('connect').onclick = function(event) {
-                if (getElementById('topic').value == '') {
-                    alert("Please enter a PubSub topic to subscribe");
-                    return;
-                }
-                connect();
-            }
-
-            getElementById('topic').onkeyup = function(event) {
-                getElementById('sendMessage').className = 'hidden';
-                var keyc = getKeyCode(event);
-                if (keyc == 13 || keyc == 10) {
-                    connect();
-                    return false;
-                }
             }
 
             getElementById('phrase').setAttribute('autocomplete', 'OFF');
@@ -87,10 +56,6 @@
                 if (keyc == 13 || keyc == 10) {
 
                     var m = " sent using " + detectedTransport;
-                    if (detectedTransport == null) {
-                        detectedTransport = getElementByIdValue('transport');
-                        m = " sent trying to use " + detectedTransport;
-                    }
 
                     subSocket.push({data: 'message=' + getElementByIdValue('phrase') + m});
 
@@ -101,16 +66,8 @@
             };
 
             getElementById('send_message').onclick = function(event) {
-                if (getElementById('topic').value == '') {
-                    alert("Please enter a message to publish");
-                    return;
-                }
-
+                
                 var m = " sent using " + detectedTransport;
-                if (detectedTransport == null) {
-                    detectedTransport = getElementByIdValue('transport');
-                    m = " sent trying to use " + detectedTransport;
-                }
 
                 subSocket.push({data: 'message=' + getElementByIdValue('phrase') + m});
 
@@ -118,7 +75,6 @@
                 return false;
             };
 
-            getElementById('topic').focus();
         });
     </script>
     <style type='text/css'>
@@ -131,10 +87,6 @@
             background-color: #e0f0f0;
         }
 
-        input#topic {
-            width: 14em;
-            background-color: #e0f0f0;
-        }
 
         div.hidden {
             display: none;
@@ -150,28 +102,11 @@
     </style>
 </head>
 <body>
-<h1>PubSub Sample using Atmosphere's JQuery Plug In. By default the sample use the DefaultBroadcaster.</h1>
-<h2>To enable Redis, XMPP, Hazelcast of ActiveMQ (JMS), uncomments in pom.xml the associated dependency or put atmosphere-{hazelcast|jms|xmpp|redis}.jar under WEB-INF/lib</h2>
 
-<h2>Select PubSub topic to subscribe</h2>
 
-<div id='pubsub'>
-    <input id='topic' type='text'/>
-</div>
-<h2>Select transport to use for subscribing</h2>
 
-<h3>You can change the transport any time.</h3>
-
-<div id='select_transport'>
-    <select id="transport">
-        <option id="autodetect" value="websocket">autodetect</option>
-        <option id="jsonp" value="jsonp">jsonp</option>
-        <option id="long-polling" value="long-polling">long-polling</option>
-        <option id="streaming" value="streaming">http streaming</option>
-        <option id="websocket" value="websocket">websocket</option>
-    </select>
-    <input id='connect' class='button' type='submit' name='connect' value='Connect'/>
-</div>
+    
+<input id='connect' class='button' type='submit' name='connect' value='Connect'/>
 <br/>
 <br/>
 

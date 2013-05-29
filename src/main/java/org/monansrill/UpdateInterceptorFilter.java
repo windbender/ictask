@@ -16,13 +16,15 @@ import org.atmosphere.cpr.BroadcasterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class UpdateInterceptorFilter implements Filter {
 
     Logger logger = LoggerFactory.getLogger(UpdateInterceptorFilter.class);
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-
 	}
 
 	@Override
@@ -42,27 +44,40 @@ public class UpdateInterceptorFilter implements Filter {
 					String message = convertStreamToString(is);
 					// broadcast the request body somehow!!!
 					String uri = wrappedRequest.getRequestURI();
-					// /ictask/jictask/items/517c6e71e4b08e87c950fcb9
+
 					logger.info("this request is on uri "+uri);
-					// {"votes":["chris"],"notes":["I Did the trail between CnA's toward Maija and Gabriels.\n\nStill need trails below and to east of Uta and Ken's"
-					//,{"who":"chris","note":"I did the trail from CnA  to MnG"},{"who":"chris","note":"third note"}]
-					//,"desc":"weed whip paths.  hillhouse to chris and amy.    ChrisAndAmy to newmans and road to Maija and Gabe.    Road nr Ken's to Hub.   Hub to Linda's"
-					//,"jobs":[{"job":"shepherd","name":"chris"}
-					//,{"job":"breaking my program","name":"renee"}],"addedBy":"chris","committee":"Land Plans","sizeInHours":3
-					//,"addedDate":"2013-04-28T00:33:52.611Z","doneDate":""}
-					logger.info("and the message is "+message);
+					String part = null;
+					String id = null;
+					if(method.equals("POST")) {
+						// new something
+						part = uri;
+					} else {
+						// DELETE or PUT
+						int x = uri.lastIndexOf("/");
+						if(x > 0) {
+							part = uri.substring(0,x);
+							id = uri.substring(x+1);
+						}
+					}
+					logger.info("message broadcast channel will be"+part);
 					
-					Broadcaster b = lookupBroadcaster(uri);
-					b.broadcast(message);
+					ObjectMapper mapper = new ObjectMapper();
+					JsonNode n = mapper.readValue(message,JsonNode.class);
+					logger.info("and the message is "+message);
+					RestAction ra = new RestAction(method.toString(),id,n);
+					String toSend = mapper.writeValueAsString(ra);
+					logger.info("and finally "+toSend);
+					String nuri = part.replaceAll("/", "");
+
+					logger.info("the broadcaster name is "+nuri);
+					Broadcaster b = lookupBroadcaster(nuri);
+					logger.info("the broadcaster is "+b);
+					b.broadcast(toSend);
 					
 					chain.doFilter(wrappedRequest, response);
-						
-					
 				}
-				
 			}
 		}
-
 	}
 
 	public static String convertStreamToString(java.io.InputStream is) {
