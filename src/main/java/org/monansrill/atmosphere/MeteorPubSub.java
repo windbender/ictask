@@ -39,31 +39,15 @@ import org.slf4j.LoggerFactory;
  * @author Jeanfrancois Arcand
  */
 @MeteorService
-public class MeteorPubSub extends HttpServlet implements Runnable {
+public class MeteorPubSub extends HttpServlet {
 
     Logger logger = LoggerFactory.getLogger("MeteorPubSub");
 
-    Thread t;
     @Override
 	public void init() throws ServletException {
-		// TODO Auto-generated method stub
 		super.init();
-		t = new Thread(this,"my timer");
-		t.start();
 	}
 
-    @Override
-	public void run() {
-    	do {
-	    	try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-			}
-	    	
-	    	Broadcaster b = lookupBroadcaster("/simple");
-	        b.broadcast("The time is "+new Date());
-    	} while(true);
-	}
 	@Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         // Create a Meteor
