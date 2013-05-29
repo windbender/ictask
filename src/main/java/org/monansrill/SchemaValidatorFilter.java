@@ -51,6 +51,8 @@ public class SchemaValidatorFilter implements Filter {
 			String method = hsr.getMethod();
 			if(method.equals("GET")) {
 				chain.doFilter(request, response);
+			} else if(method.equals("DELETE")) {
+				chain.doFilter(request, response);
 			} else {
 				if( ((HttpServletRequest) request).getRequestURI().contains("archived") ) {
 					chain.doFilter(request, response);
