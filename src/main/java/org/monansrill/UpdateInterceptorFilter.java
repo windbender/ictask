@@ -60,13 +60,18 @@ public class UpdateInterceptorFilter implements Filter {
 						}
 					}
 					logger.info("message broadcast channel will be"+part);
-					
 					ObjectMapper mapper = new ObjectMapper();
-					JsonNode n = mapper.readValue(message,JsonNode.class);
+					JsonNode n = null;
+					if(!method.equals("DELETE")) {						
+						n = mapper.readValue(message,JsonNode.class);
+					} else {
+						n = mapper.readValue("{}",JsonNode.class);
+					}
 					logger.info("and the message is "+message);
 					RestAction ra = new RestAction(method.toString(),id,n);
 					String toSend = mapper.writeValueAsString(ra);
 					logger.info("and finally "+toSend);
+					
 					String nuri = part.replaceAll("/", "");
 
 					logger.info("the broadcaster name is "+nuri);
