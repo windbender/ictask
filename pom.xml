@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<httpclient.version>4.1.2</httpclient.version>
+		<httpclient.version>4.3.6</httpclient.version>
 	</properties>
 
 	<dependencies>
